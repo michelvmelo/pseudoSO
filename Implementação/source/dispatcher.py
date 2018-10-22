@@ -35,3 +35,4 @@ for x in range(0, len(lista_processos)):
 					'scanner': int(lista_processos[x][5]),
 					'modem': int(lista_processos[x][6]),
 					'disco': int(lista_processos[x][7])}
+
