@@ -5,3 +5,4 @@
 * Jean Pierre
 * Raphael Rodrigues
 * Michel Melo
+* Paulo da Cunha Passos
