@@ -46,12 +46,16 @@ def main():
         listaArquivos   = lerArqSistemaArquivos(arqArquivos)
 
         gerenArquivos.inicializarDisco()
-        #incializar demais recurso tb
+
         ####TESTE INICIO#######
         proc = gerenProcessos.filaProcessosProntos.pop(0)
         gerenProcessos.separarProcesso(proc)
         gerenProcessos.executarProcesso(gerenRecursos, gerenMemoria)
-        ####TESTE fim#######
+
+        proc = gerenProcessos.filaProcessosProntos.pop(0)
+        gerenProcessos.separarProcesso(proc)
+        gerenProcessos.executarProcesso(gerenRecursos, gerenMemoria)
+        ####TESTE FIM#######
 
         tempoAtual = 0
         # cria threads que representam os processos e as deixa travadas

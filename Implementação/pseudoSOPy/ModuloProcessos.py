@@ -13,7 +13,7 @@ class Processo:
         self.disco          = int(processo[7])
         self.offset         = None
         self.PID            = None
-
+    """
     def __str__(self):
         return (
             f'\tPID: {self.PID}\n'+
@@ -26,7 +26,7 @@ class Processo:
             f'\tmodems: {self.modem}\n'+
             f'\tdrivers: {self.disco}\n'
         )
-
+    """
 class GerenciadorProcessos:
     def __init__ (self):
         self.contPID = 0
@@ -75,7 +75,7 @@ class GerenciadorProcessos:
                 print(proc.__str__())
             else:
                 # se nao disponivel, coloca o processo de volta na fila de pronto
-                print("Não ha recurso ou memoria para executar o processo!")
+                #print("Nao ha recurso ou memoria para executar o processo!")
                 print("mandar processo para final da fila")
 
             self.filaProcessosProntos.insert(0, proc)

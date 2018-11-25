@@ -32,6 +32,8 @@ class GerenciadorRecursos:
             disponibilidade = False
         if impressora == 2 and self.impressora2 is not None:
             disponibilidade = False
+        if not disponibilidade:
+            print("Os recursos que o processo pede nao estao disponiveis!")
         return disponibilidade
 
     def alocarRecurso(self, processo):
@@ -63,7 +65,7 @@ class GerenciadorRecursos:
                 self.scanner,
                 self.impressora1,
                 self.impressora2 )
-        ####TESTE fim#######    
+        ####TESTE fim#######
     def desalocarRecurso(self, processo):
         self.desalocarMutex.acquire()
         PID = processo['PID']
