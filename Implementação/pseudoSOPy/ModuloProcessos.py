@@ -1,4 +1,5 @@
 import operator
+import threading
 
 class Processo:
     def __init__ (self, processo):
@@ -10,20 +11,38 @@ class Processo:
         self.scanner        = int(processo[5])
         self.modem          = int(processo[6])
         self.disco          = int(processo[7])
+        self.offset         = None
         self.PID            = None
 
+    def __str__(self):
+        return (
+            f'\tPID: {self.PID}\n'+
+            f'\toffset: {self.offset}\n'+
+            f'\tblocks: {self.blocos_mem}\n'+
+            f'\tpriority: {self.prioridade}\n'+
+            f'\ttime: {self.tempo_cpu}\n'+
+            f'\tprinters: {self.impressora}\n'+
+            f'\tscanners: {self.scanner}\n'+
+            f'\tmodems: {self.modem}\n'+
+            f'\tdrivers: {self.disco}\n'
+        )
+
 class GerenciadorProcessos:
-    contPID = 0
-    filaTempoReal   = []
-    prioridade_1    = []
-    prioridade_2    = []
-    prioridade_3    = []
-    filaProcessosUsuario = [] # Retirar
-    filaProcessosProntos = []
+    def __init__ (self):
+        self.contPID = 0
+        self.filaTempoReal   = []
+        self.prioridade_1    = []
+        self.prioridade_2    = []
+        self.prioridade_3    = []
+        self.filaProcessosUsuario = [] # Retirar
+        self.filaProcessosProntos = []
+        self.vcTempoReal = threading.Condition()
+
 
     ''' Tira os processos da fila de pronto e insere na Fila de     '''
     ''' Processos de Prioridade ou na fila de Processos de Tempo Real  '''
     def separarProcesso(self, processo):
+        print(processo)
         if processo['prioridade'] == 0 and len(self.filaTempoReal) < 1000:
             self.filaTempoReal.append(processo)
         elif processo['prioridade'] == 1 and len(self.prioridade_1) < 1000:
@@ -39,17 +58,24 @@ class GerenciadorProcessos:
         #seleciona o processo de maior prioridade
         if len(self.filaTempoReal) != 0:
             proc = self.filaTempoReal.pop(0)
-            
+
             #checa disponibilidade de recursos
             if recursos.checarRecursos(proc) and memoria.checarMemoria(proc):
                 # Se os recursos estao disponivel:
                 # Atribui PID ao processo
                 proc['PID'] = self.contPID
-                print("Alocar memoria e alocar recursos")
+
+                # Alocar gerenRecursos
+                print("Alocando recursos...")
+                recursos.alocarRecurso(proc)
+                print("Alocando mamoria...")
+                memoria.alocarMemoria(proc)
 
                 print("montar processo")
+                print(proc.__str__())
             else:
                 # se nao disponivel, coloca o processo de volta na fila de pronto
+                print("Não ha recurso ou memoria para executar o processo!")
                 print("mandar processo para final da fila")
 
             self.filaProcessosProntos.insert(0, proc)
@@ -62,10 +88,6 @@ class GerenciadorProcessos:
         else:
             ########## RETIRAR PRINT !!!!!!!!
             print("preencher else")
-
-
-
-
 
 
     def executarProcesso(self, recursos, memoria):

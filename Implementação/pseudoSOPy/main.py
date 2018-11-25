@@ -1,4 +1,5 @@
 import sys
+import threading
 from operator import itemgetter
 import ModuloMemoria   as mm
 import ModuloArquivos  as ma
@@ -30,6 +31,10 @@ def lerArqSistemaArquivos(arquivo):
     gerenArquivos.listaOperacoes  = [ma.Operacao(infoSisArq[x]).__dict__ for x in range(gerenArquivos.numeroSegmentos + 2, len(infoSisArq))]
     #print(gerenArquivos.listaArquivos)
     #print(gerenArquivos.listaOperacoes)
+def operacao(n, sema):
+
+    sema.acquire()
+    print("Operacao", n)
 
 def main():
     if len(sys.argv) > 2:
@@ -42,9 +47,17 @@ def main():
 
         gerenArquivos.inicializarDisco()
         #incializar demais recurso tb
-
+        ####TESTE INICIO#######
+        proc = gerenProcessos.filaProcessosProntos.pop(0)
+        gerenProcessos.separarProcesso(proc)
+        gerenProcessos.executarProcesso(gerenRecursos, gerenMemoria)
+        ####TESTE fim#######
 
         tempoAtual = 0
+        # cria threads que representam os processos e as deixa travadas
+        # aguardando a liberacao de um release()
+
+        """
         #laco de tempo, cada volta representa um segundo
         while(len(gerenProcessos.filaProcessosProntos) != 0 ):
             #Separa os processos por prioridade no tempo atual
@@ -52,15 +65,15 @@ def main():
                 proc = gerenProcessos.filaProcessosProntos.pop(0)
                 gerenProcessos.separarProcesso(proc)
 
-            #Executar processos
             gerenProcessos.executarProcesso(gerenRecursos, gerenMemoria)
+            #gerenProcessos.executarProcesso(gerenRecursos, gerenMemoria)
             tempoAtual += 1 # avanca um segundo no tempo
             print("tempo:", tempoAtual)
             #print("tempo real:", gerenProcessos.filaTempoReal)
             #print("Prioridade 1:", gerenProcessos.prioridade_1)
             #print("Prioridade 2:", gerenProcessos.prioridade_2)
             #print("Prioridade 3:", gerenProcessos.prioridade_3)
-
+        """
 
     else:
         print ("Para rodar corretamente o sistema digite: main.py + 'nome do arquivo de processos' + 'nome do arquivo de arquivos'")
