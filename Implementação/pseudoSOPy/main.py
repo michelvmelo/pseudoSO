@@ -3,10 +3,12 @@ from operator import itemgetter
 import ModuloMemoria   as mm
 import ModuloArquivos  as ma
 import ModuloProcessos as mp
+import ModuloRecursos  as mr
 
 # inicia os modulos de genernciamento do sistema
 gerenMemoria   = mm.GerenciadorMemoria()
 gerenArquivos  = ma.GerenciadorArquivos()
+gerenRecursos  = mr.GerenciadorRecursos()
 gerenProcessos = mp.GerenciadorProcessos()
 
 # Le o aqrquivo de processos
@@ -32,19 +34,33 @@ def lerArqSistemaArquivos(arquivo):
 def main():
     if len(sys.argv) > 2:
         # Lembrar de verificar a estrutura dos arquivos ???????
-        arqProcessos = open(sys.argv[1], "r")
-        arqArquivos = open(sys.argv[2], "r")
+        arqProcessos    = open(sys.argv[1], "r")
+        arqArquivos     = open(sys.argv[2], "r")
 
-        listaProcessos = lerArqProcessos(arqProcessos)
-        listaArquivos  = lerArqSistemaArquivos(arqArquivos)
+        listaProcessos  = lerArqProcessos(arqProcessos)
+        listaArquivos   = lerArqSistemaArquivos(arqArquivos)
 
         gerenArquivos.inicializarDisco()
+        #incializar demais recurso tb
 
 
+        tempoAtual = 0
+        #laco de tempo, cada volta representa um segundo
+        while(len(gerenProcessos.filaProcessosProntos) != 0 ):
+            #Separa os processos por prioridade no tempo atual
+            while (len(gerenProcessos.filaProcessosProntos) != 0 and gerenProcessos.filaProcessosProntos[0]['tempo_inicial'] <= tempoAtual):
+                proc = gerenProcessos.filaProcessosProntos.pop(0)
+                gerenProcessos.separarProcesso(proc)
 
-        while (len(gerenProcessos.filaProcessosProntos) == 0):
-            
-            gerenProcessos.separarProcesso()
+            #Executar processos
+            gerenProcessos.executarProcesso(gerenRecursos, gerenMemoria)
+            tempoAtual += 1 # avanca um segundo no tempo
+            print("tempo:", tempoAtual)
+            #print("tempo real:", gerenProcessos.filaTempoReal)
+            #print("Prioridade 1:", gerenProcessos.prioridade_1)
+            #print("Prioridade 2:", gerenProcessos.prioridade_2)
+            #print("Prioridade 3:", gerenProcessos.prioridade_3)
+
 
     else:
         print ("Para rodar corretamente o sistema digite: main.py + 'nome do arquivo de processos' + 'nome do arquivo de arquivos'")

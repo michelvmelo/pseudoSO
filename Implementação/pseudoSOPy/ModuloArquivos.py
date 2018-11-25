@@ -28,4 +28,4 @@ class GerenciadorArquivos:
         for arquivos in self.listaArquivos:
             # Preenche os blocos do disco com o nome dos arquivos de entrada correspondente
             self.disco[arquivos['primeiroBloco']:arquivos['primeiroBloco'] + arquivos['quantidadeBlocos']] = arquivos['quantidadeBlocos'] *[arquivos['nome']]
-        print(self.disco)
+        #print(self.disco)
