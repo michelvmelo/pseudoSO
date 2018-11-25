@@ -7,7 +7,5 @@ for k, g in groupby(enumerate(data), itemgetter(1)):
     #for x in g:
     #    print " X %s e k %s." %(g, k)
     #print(k) #chave
-    cont +=1
-    
-    print(cont)
+
     print map(itemgetter(1), g)

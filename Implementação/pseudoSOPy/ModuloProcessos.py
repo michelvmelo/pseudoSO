@@ -13,20 +13,7 @@ class Processo:
         self.disco          = int(processo[7])
         self.offset         = None
         self.PID            = None
-    """
-    def __str__(self):
-        return (
-            f'\tPID: {self.PID}\n'+
-            f'\toffset: {self.offset}\n'+
-            f'\tblocks: {self.blocos_mem}\n'+
-            f'\tpriority: {self.prioridade}\n'+
-            f'\ttime: {self.tempo_cpu}\n'+
-            f'\tprinters: {self.impressora}\n'+
-            f'\tscanners: {self.scanner}\n'+
-            f'\tmodems: {self.modem}\n'+
-            f'\tdrivers: {self.disco}\n'
-        )
-    """
+
 class GerenciadorProcessos:
     def __init__ (self):
         self.contPID = 0
