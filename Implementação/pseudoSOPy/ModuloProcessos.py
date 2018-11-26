@@ -14,6 +14,7 @@ class Processo:
         self.offset         = None
         self.PID            = None
 
+
 class GerenciadorProcessos:
     def __init__ (self):
         self.contPID = 0
@@ -25,6 +26,17 @@ class GerenciadorProcessos:
         self.filaProcessosProntos = []
         self.vcTempoReal = threading.Condition()
 
+    def imprimirProcesso(self, processo):
+        print('dispatcher =>')
+        print('\tPID: {}'.format(processo['PID']))
+        print('\toffset: {}'.format(processo['offset']))
+        print('\tblocks: {}'.format(processo['blocos_mem']))
+        print('\tpriority: {}'.format(processo['prioridade']))
+        print('\ttime: {}'.format(processo['tempo_cpu']))
+        print('\tprinters: {}'.format(processo['impressora']))
+        print('\tscanners: {}'.format(processo['scanner']))
+        print('\tmodems: {}'.format(processo['modem']))
+        print('\tdrives: {}\n'.format(processo['disco']))
 
     ''' Tira os processos da fila de pronto e insere na Fila de     '''
     ''' Processos de Prioridade ou na fila de Processos de Tempo Real  '''
@@ -59,7 +71,7 @@ class GerenciadorProcessos:
                 memoria.alocarMemoria(proc)
 
                 print("montar processo")
-                print(proc.__str__())
+                self.imprimirProcesso(proc)
             else:
                 # se nao disponivel, coloca o processo de volta na fila de pronto
                 #print("Nao ha recurso ou memoria para executar o processo!")

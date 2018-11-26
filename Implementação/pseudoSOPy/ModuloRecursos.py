@@ -14,6 +14,7 @@ class GerenciadorRecursos:
 
     # Checa se os recursos que o processo necessita estao disponiveis
     def checarRecursos(self, processo):
+        #colocar semaforo
         impressora     = processo['impressora']
         scanner        = processo['scanner']
         modem          = processo['modem']

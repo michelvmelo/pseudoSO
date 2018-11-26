@@ -14,16 +14,31 @@ class GerenciadorMemoria:
     def checarMemoria(self, processo):
         self.alocarMutex.acquire() # Semaforo que garante exclusao mutua
         self.desalocarMutex.acquire()
-        offset = 0
-        # Acha blocos continuos com marcados com mesmo PID ou com -1
-        for k, g in groupby(enumerate(self.memoria), itemgetter(1)):
-            bloco = map(itemgetter(1), g)
-            #print map(itemgetter(1), g)
-            if len(bloco) >= processo['blocos_mem'] and bloco[0] == -1:
-                processo['offset'] = offset
-                return True
-            offset = offset + len(bloco)
 
+        memReal = [x for x in self.memoria[0:64]]
+        memUser = [x for x in self.memoria[64:1024]]
+        #se for processo do sistema
+        if processo['prioridade'] == 0:
+            offset = 0
+            # Acha blocos continuos com marcados com mesmo PID ou com -1
+            for k, g in groupby(enumerate(memReal), itemgetter(1)):
+                bloco = map(itemgetter(1), g)
+                #print map(itemgetter(1), g)
+                if len(bloco) >= processo['blocos_mem'] and bloco[0] == -1:
+                    processo['offset'] = offset
+                    return True
+                offset = offset + len(bloco)
+        else:
+            #Se for processo de usuario
+            offset = 64
+            # Acha blocos continuos com marcados com mesmo PID ou com -1
+            for k, g in groupby(enumerate(memUser), itemgetter(1)):
+                bloco = map(itemgetter(1), g)
+                #print map(itemgetter(1), g)
+                if len(bloco) >= processo['blocos_mem'] and bloco[0] == -1:
+                    processo['offset'] = offset
+                    return True
+                offset = offset + len(bloco)
         self.alocarMutex.release() # se nao tiver memoria p o processo
                                    # ele libera a escrita na memoria
         self.desalocarMutex.release()
@@ -40,7 +55,7 @@ class GerenciadorMemoria:
         fim     = ini + processo['blocos_mem']
 
         self.memoria[ini:fim] = blocos*[PID]
-        print(self.memoria)
+        #print(self.memoria)
         self.alocarMutex.release()
         self.desalocarMutex.release()
 
