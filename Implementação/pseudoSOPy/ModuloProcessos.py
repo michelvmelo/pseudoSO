@@ -13,6 +13,7 @@ class Processo:
         self.disco          = int(processo[7])
         self.offset         = None
         self.PID            = None
+        self.contInstrucao  = None
 
 
 class GerenciadorProcessos:
@@ -22,10 +23,9 @@ class GerenciadorProcessos:
         self.prioridade_1    = []
         self.prioridade_2    = []
         self.prioridade_3    = []
-        self.filaProcessosUsuario = [] # Retirar
         self.filaProcessosProntos = []
         self.vcTempoReal = threading.Condition()
-        self.executando = {}
+        self.executando = None
 
     def imprimirProcesso(self, processo):
         print('dispatcher =>')
@@ -56,6 +56,7 @@ class GerenciadorProcessos:
             raise Exception("Capacidade maxima de processos atingida!!!! MAIOR QUE 1000!!!!")
 
     def escalonarProcesso(self, recursos, memoria, arquivos):
+
         #seleciona o processo de maior prioridade
         if len(self.filaTempoReal) != 0:
             proc = self.filaTempoReal.pop(0)
@@ -66,23 +67,27 @@ class GerenciadorProcessos:
                 # Atribui PID ao processo
                 if proc['PID'] == None:
                     proc['PID'] = self.contPID
+                    self.executando = proc
                     self.contPID += 1
 
                 # Alocar gerenRecursos
                 print("Alocando recursos...")
                 recursos.alocarRecurso(proc)
-                print("Alocando mamoria...")
+                recursos.imprimirRecursos()
+                print("Alocando memoria...")
                 memoria.alocarMemoria(proc)
 
                 print("montar processo")
                 self.imprimirProcesso(proc)
+                PID     = proc['PID']
+                print('process {} =>'.format(proc['PID']))
+                print('P{} STARTED'.format(proc['PID']))
 
-                #executar Processo
-                #operacoes = [x for x in arquivos.listaOperacoes if x['idProcesso'] == proc['PID']]
-                arquivos.executaOperacao(proc)
+                aux = arquivos.executaOperacao(proc)
+                # Se nao tiver mais operacoes a executar mata o processo
+                if not aux:
+                    self.matarprocesso(recursos, memoria, proc)
 
-                recursos.desalocarRecurso(proc)
-                memoria.desalocaMemoria(proc)
             else:
                 proc['tempo_inicial'] = proc['tempo_inicial'] + 1
                 #self.filaProcessosProntos.append(proc)
@@ -101,7 +106,33 @@ class GerenciadorProcessos:
             ########## RETIRAR PRINT !!!!!!!! Caso seja falso no loop
             print("preencher else")
 
+    def matarprocesso(self, recursos, memoria, processo):
+        aux = False
+        if processo in self.filaProcessosProntos:
+            self.filaProcessosProntos.remove(processo)
+            aux = True
+        if processo in self.filaTempoReal:
+            self.filaTempoReal.remove(processo)
+            aux = True
+        if processo in self.prioridade_1:
+            self.prioridade_1.remove(processo)
+            aux = True
+        if processo in self.prioridade_2:
+            self.prioridade_2.remove(processo)
+            aux = True
+        if processo in self.prioridade_3:
+            self.prioridade_3.remove(processo)
+            aux = True
+        if aux:
+            recursos.desalocarRecurso(processo)
+            memoria.desalocaMemoria(processo)
 
     def executarProcesso(self, recursos, memoria, arquivos):
-        self.escalonarProcesso(recursos, memoria, arquivos)
-        print("funcao executarProcesso")
+        # Se ja existe um processo executando
+        if self.executando is not None:
+            aux = arquivos.executaOperacao(self.executando)
+            # Se nao tiver mais operacoes a executar mata o processo
+            if not aux:
+                self.matarprocesso(recursos, memoria, self.executando)
+        else:
+            self.escalonarProcesso(recursos, memoria, arquivos)

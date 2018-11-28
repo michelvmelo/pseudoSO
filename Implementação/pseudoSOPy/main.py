@@ -30,7 +30,9 @@ def lerArqSistemaArquivos(arquivo):
     gerenArquivos.numeroBlocos    = int(infoSisArq[0][0])
     gerenArquivos.numeroSegmentos = int(infoSisArq[1][0])
     gerenArquivos.listaArquivos   = [ma.Arquivo(infoSisArq[x]).__dict__ for x in range(2, gerenArquivos.numeroSegmentos + 2)]
-    gerenArquivos.listaOperacoes  = [ma.Operacao(infoSisArq[x]).__dict__ for x in range(gerenArquivos.numeroSegmentos + 2, len(infoSisArq))]
+    operacoes                     = [ma.Operacao(infoSisArq[x]).__dict__ for x in range(gerenArquivos.numeroSegmentos + 2, len(infoSisArq))]
+    gerenArquivos.listaOperacoes  = sorted(operacoes, key = itemgetter('idProcesso'))
+    gerenArquivos.numerarOperacoes()
     #print(gerenArquivos.listaArquivos)
     #print(gerenArquivos.listaOperacoes)
 

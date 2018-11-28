@@ -12,6 +12,14 @@ class GerenciadorRecursos:
         self.alocarMutex    = threading.Semaphore()
         self.desalocarMutex    = threading.Semaphore()
 
+    def imprimirRecursos(self):
+        print(  self.sata1,
+                self.sata2,
+                self.modem ,
+                self.scanner,
+                self.impressora1,
+                self.impressora2 )
+
     # Checa se os recursos que o processo necessita estao disponiveis
     def checarRecursos(self, processo):
         #colocar semaforo
@@ -39,10 +47,10 @@ class GerenciadorRecursos:
 
     def alocarRecurso(self, processo):
         self.alocarMutex.acquire() # Permite que apenas um processo entre nessa regiao por vez
-        impressora    = processo['impressora']
-        scanner        = processo['scanner']
-        modem        = processo['modem']
-        disco        = processo['disco']
+        impressora = processo['impressora']
+        scanner    = processo['scanner']
+        modem      = processo['modem']
+        disco      = processo['disco']
         PID        = processo['PID']
         # reserva o recurso para o processo
         if disco == 1:
@@ -60,12 +68,7 @@ class GerenciadorRecursos:
         self.alocarMutex.release()
 
         ####TESTE INICIO#######
-        print(  self.sata1,
-                self.sata2,
-                self.modem ,
-                self.scanner,
-                self.impressora1,
-                self.impressora2 )
+
         ####TESTE fim#######
     def desalocarRecurso(self, processo):
         self.desalocarMutex.acquire()
