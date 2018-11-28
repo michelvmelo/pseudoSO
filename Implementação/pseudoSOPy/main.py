@@ -48,29 +48,29 @@ def main():
         arqArquivos     = open(sys.argv[2], "r")
 
         listaProcessos  = lerArqProcessos(arqProcessos)
-        #print "AQUI!!",listaProcessos
         listaArquivos   = lerArqSistemaArquivos(arqArquivos)
-        #print listaArquivos
 
         gerenArquivos.inicializarDisco()
 
-        ####TESTE INICIO#######
-        contador = len(gerenProcessos.filaProcessosProntos)*3
-        for n in range(contador):
-            if len(gerenProcessos.filaProcessosProntos) > 0:
-                print 'TEMPO: {}'.format(n)
-                prs = [pr for pr in gerenProcessos.filaProcessosProntos if pr['tempo_inicial'] == n]
+        tempo = 0
+        #for n in range(14):
+        while (len(gerenProcessos.filaProcessosProntos) > 0):
+            print 'TEMPO: {}'.format(tempo)
+
+            if gerenProcessos.executando:
+                aux = gerenArquivos.executaOperacao(gerenProcessos.executando)
+                if not aux:
+                    gerenProcessos.matarprocesso(gerenRecursos, gerenMemoria, gerenProcessos.executando)
+                    gerenProcessos.escalonarProcesso(gerenRecursos, gerenMemoria, gerenArquivos)
+
+            else:
+                prs = [pr for pr in gerenProcessos.filaProcessosProntos if pr['tempo_inicial'] <= tempo]
                 for pr in prs:
                     gerenProcessos.filaProcessosProntos.remove(pr)
                     gerenProcessos.separarProcesso(pr)
 
-                #print ("Prontos", gerenProcessos.filaProcessosProntos)
-                #print ("Real", gerenProcessos.filaTempoReal)
-                gerenProcessos.executarProcesso(gerenRecursos, gerenMemoria, gerenArquivos)
-            else:
-                break
-
-        ####TESTE FIM#######
+                gerenProcessos.escalonarProcesso(gerenRecursos, gerenMemoria, gerenArquivos)
+            tempo += 1
 
     else:
         print ("Para rodar corretamente o sistema digite: main.py + 'nome do arquivo de processos' + 'nome do arquivo de arquivos'")

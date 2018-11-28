@@ -110,7 +110,7 @@ class GerenciadorArquivos:
             ##### OPERACAO PARA DELETAR ARQUIVO ##############
             elif op1:
                 op  = op1.pop(0)
-                rem = False
+                #rem = False
                 #verifica se arquivo a ser deletado esta no disco
                 arq = [x for x in self.listaArquivos if x['nome'] == op['nomeArquivo']]
                 if arq:
@@ -129,6 +129,5 @@ class GerenciadorArquivos:
             return True
         else:# Se nao houver operacao a ser executada
             #Vai matar o processo e desalocar recursos e memoria
-            
             print 'Nao há mais operação a ser executado pelo processo {}.\n'.format(processo['PID'])
             return False

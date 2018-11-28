@@ -22,7 +22,7 @@ class GerenciadorRecursos:
 
     # Checa se os recursos que o processo necessita estao disponiveis
     def checarRecursos(self, processo):
-        #colocar semaforo
+
         impressora      = processo['impressora']
         scanner         = processo['scanner']
         modem           = processo['modem']
@@ -50,7 +50,6 @@ class GerenciadorRecursos:
         return disponibilidade
 
     def alocarRecurso(self, processo):
-        self.alocarMutex.acquire() # Permite que apenas um processo entre nessa regiao por vez
         impressora = processo['impressora']
         scanner    = processo['scanner']
         modem      = processo['modem']
@@ -69,13 +68,12 @@ class GerenciadorRecursos:
             self.impressora1 = PID
         if modem == 1:
             self.impressora1 = PID
-        self.alocarMutex.release()
+
 
         ####TESTE INICIO#######
 
         ####TESTE fim#######
     def desalocarRecurso(self, processo):
-        self.desalocarMutex.acquire()
         PID = processo['PID']
 
         if self.sata1 == PID:
@@ -90,4 +88,3 @@ class GerenciadorRecursos:
             self.impressora1 = None
         if self.impressora2 == PID:
             self.impressora2 = None
-        self.desalocarMutex.release()

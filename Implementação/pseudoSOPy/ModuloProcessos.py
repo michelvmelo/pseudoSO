@@ -46,14 +46,14 @@ class GerenciadorProcessos:
         if (processo['prioridade'] == 0 and len(self.filaTempoReal) < 1000):
             self.filaTempoReal.append(processo)
         elif (processo['prioridade'] == 1 and len(self.prioridade_1) < 1000):
-            prin("teste")
             self.prioridade_1.append(processo)
         elif (processo['prioridade'] == 2 and len(self.prioridade_2) < 1000):
             self.prioridade_2.append(processo)
         elif (processo['prioridade'] == 3 and len(self.prioridade_3) < 1000):
             self.prioridade_3.append(processo)
         else:
-            raise Exception("Capacidade maxima de processos atingida!!!! MAIOR QUE 1000!!!!")
+            print(processo)
+            print("Capacidade maxima de processos atingida!!!! MAIOR QUE 1000!!!!")
 
     def criarProcesso(self, recursos, memoria, arquivos, proc):
         if recursos.checarRecursos(proc) and memoria.checarMemoria(proc):
@@ -67,7 +67,7 @@ class GerenciadorProcessos:
             # Alocar gerenRecursos
             #print("Alocando recursos...")
             recursos.alocarRecurso(proc)
-            recursos.imprimirRecursos()
+            #recursos.imprimirRecursos()
             #print("Alocando memoria...")
             memoria.alocarMemoria(proc)
 
@@ -81,6 +81,7 @@ class GerenciadorProcessos:
             # Se nao tiver mais operacoes a executar mata o processo
             if not aux:
                 self.matarprocesso(recursos, memoria, proc)
+
 
         else:
             proc['tempo_inicial'] = proc['tempo_inicial'] + 1
@@ -135,46 +136,23 @@ class GerenciadorProcessos:
 
     def matarprocesso(self, recursos, memoria, processo):
         aux = False
-        print(processo)
+        #print(processo)
+        self.executando = None
         if processo in self.filaProcessosProntos:
             self.filaProcessosProntos.remove(processo)
-            if self.executando == processo:
-                self.executando = None
             aux = True
         if processo in self.filaTempoReal:
             self.filaTempoReal.remove(processo)
-            print('Antes')
-            if self.executando == processo:
-                print('depois')
-                self.executando = None
-
             aux = True
         if processo in self.prioridade_1:
             self.prioridade_1.remove(processo)
-            if self.executando == processo:
-                self.executando = None
             aux = True
         if processo in self.prioridade_2:
             self.prioridade_2.remove(processo)
-            if self.executando == processo:
-                self.executando = None
             aux = True
         if processo in self.prioridade_3:
             self.prioridade_3.remove(processo)
-            if self.executando == processo:
-                self.executando = None
             aux = True
-        if aux:
-            recursos.desalocarRecurso(processo)
-            memoria.desalocaMemoria(processo)
 
-    def executarProcesso(self, recursos, memoria, arquivos):
-        # Se ja existe um processo executando
-        if self.executando is not None:
-            aux = arquivos.executaOperacao(self.executando)
-            # Se nao tiver mais operacoes a executar mata o processo
-            if not aux:
-                self.matarprocesso(recursos, memoria, self.executando)
-                self.escalonarProcesso(recursos, memoria, arquivos)
-        else:
-            self.escalonarProcesso(recursos, memoria, arquivos)
+        recursos.desalocarRecurso(processo)
+        memoria.desalocaMemoria(processo)

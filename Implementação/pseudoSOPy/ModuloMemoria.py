@@ -1,4 +1,3 @@
-import threading
 from itertools import groupby
 from operator import itemgetter
 
@@ -7,13 +6,9 @@ class GerenciadorMemoria:
     def __init__(self):
         self.memoria = 1024*[-1]
 
-        self.alocarMutex    = threading.Semaphore()
-        self.desalocarMutex    = threading.Semaphore()
-
     # Checa se ha memoria disponivel para o processo
     def checarMemoria(self, processo):
-        self.alocarMutex.acquire() # Semaforo que garante exclusao mutua
-        self.desalocarMutex.acquire()
+
 
         memReal = [x for x in self.memoria[0:64]]
         memUser = [x for x in self.memoria[64:1024]]
@@ -38,10 +33,8 @@ class GerenciadorMemoria:
                     processo['offset'] = offset
                     return True
                 offset = offset + len(bloco)
-        self.alocarMutex.release() # se nao tiver memoria p o processo
-                                   # ele libera a escrita na memoria
-        self.desalocarMutex.release()
-        print("Nao ha memoria suficiente para executar o processo %s" %processo['PID'])
+
+        print("Nao ha memoria suficiente para executar o processo")
         return False
 
     def alocarMemoria(self, processo):
@@ -54,16 +47,10 @@ class GerenciadorMemoria:
         fim     = ini + processo['blocos_mem']
 
         self.memoria[ini:fim] = blocos*[PID]
-        #print(self.memoria)
-        self.alocarMutex.release()
-        self.desalocarMutex.release()
+
 
     def desalocaMemoria(self, processo):
-        # verificar como fechar a regiao critica
-        self.desalocarMutex.acquire()
         PID = processo['PID']
         ini = processo['offset']
         fim = ini + processo['blocos_mem']
-
         self.memoria[ini:fim] = processo['blocos_mem']*[-1]
-        self.desalocarMutex.release()
