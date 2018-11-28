@@ -129,5 +129,6 @@ class GerenciadorArquivos:
             return True
         else:# Se nao houver operacao a ser executada
             #Vai matar o processo e desalocar recursos e memoria
+            
             print 'Nao há mais operação a ser executado pelo processo {}.\n'.format(processo['PID'])
             return False

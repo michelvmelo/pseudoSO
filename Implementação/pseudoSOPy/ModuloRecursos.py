@@ -23,23 +23,27 @@ class GerenciadorRecursos:
     # Checa se os recursos que o processo necessita estao disponiveis
     def checarRecursos(self, processo):
         #colocar semaforo
-        impressora    = processo['impressora']
-        scanner        = processo['scanner']
-        modem        = processo['modem']
-        disco        = processo['disco']
+        impressora      = processo['impressora']
+        scanner         = processo['scanner']
+        modem           = processo['modem']
+        disco           = processo['disco']
         disponibilidade = True
 
         if disco == 1 and self.sata1 is not None:
             disponibilidade = False
         if disco == 2 and self.sata2 is not None:
             disponibilidade = False
-        if modem > 0 and self.modem is not None:
+        if modem == 1 and self.modem is not None:
             disponibilidade = False
-        if scanner > 0 and self.scanner is not None:
+        if scanner == 1 and self.scanner is not None:
             disponibilidade = False
         if impressora == 1 and self.impressora1 is not None:
             disponibilidade = False
         if impressora == 2 and self.impressora2 is not None:
+            disponibilidade = False
+        if impressora > 2 or impressora < 0:
+            disponibilidade = False
+        if disco > 2 or disco < 0:
             disponibilidade = False
         if not disponibilidade:
             print("Os recursos que o processo pede nao estao disponiveis!")

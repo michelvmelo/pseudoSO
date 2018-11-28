@@ -55,73 +55,114 @@ class GerenciadorProcessos:
         else:
             raise Exception("Capacidade maxima de processos atingida!!!! MAIOR QUE 1000!!!!")
 
+    def criarProcesso(self, recursos, memoria, arquivos, proc):
+        if recursos.checarRecursos(proc) and memoria.checarMemoria(proc):
+            # Se os recursos estao disponivel:
+            # Atribui PID ao processo
+            if proc['PID'] == None:
+                proc['PID'] = self.contPID
+                self.executando = proc
+                self.contPID += 1
+
+            # Alocar gerenRecursos
+            #print("Alocando recursos...")
+            recursos.alocarRecurso(proc)
+            recursos.imprimirRecursos()
+            #print("Alocando memoria...")
+            memoria.alocarMemoria(proc)
+
+            #print("montar processo")
+            self.imprimirProcesso(proc)
+            PID     = proc['PID']
+            print('process {} =>'.format(proc['PID']))
+            print('P{} STARTED'.format(proc['PID']))
+
+            aux = arquivos.executaOperacao(proc)
+            # Se nao tiver mais operacoes a executar mata o processo
+            if not aux:
+                self.matarprocesso(recursos, memoria, proc)
+
+        else:
+            proc['tempo_inicial'] = proc['tempo_inicial'] + 1
+
+            # Verifica as condicoes da indisponibilidade de memoria
+            if proc['prioridade'] == 0 and proc['blocos_mem'] > 64:
+                #self.filaTempoReal.remove(proc)
+                print 'O processo requer um tamanho de memoria maior que o disponivel.(Esse processo de nucleo nao sera executado nunca)\n'
+            elif proc['prioridade'] != 0 and proc['blocos_mem'] > 960:
+                #self.filaTempoReal.remove(proc)
+                print 'O processo requer um tamanho de memoria maior que o disponivel.(Esse processo de usuario nao sera executado nunca)\n'
+            else:
+                # Se nao existe espacao mas ele cabe na gerenMemoria
+                # Manda o processo para o fim da fila
+                #self.filaTempoReal.remove(proc)
+                self.filaProcessosProntos.append(proc)
+
+            # Verifica as condicoes da indisponibilidade de recurso
+            impressora      = proc['impressora']
+            scanner         = proc['scanner']
+            modem           = proc['modem']
+            disco           = proc['disco']
+            boolImpressora  = impressora > 2 or impressora < 0
+            boolScanner     = scanner != 1
+            boolModem       = modem   != 1
+            boolDisco       = disco > 2 or disco < 0
+            if boolImpressora or boolScanner or boolModem or boolDisco:
+                print 'Os recursos solicitados pelo processo nao existe no sistema!\n'
+            else:
+                self.filaProcessosProntos.append(proc)
+
+
     def escalonarProcesso(self, recursos, memoria, arquivos):
 
         #seleciona o processo de maior prioridade
         if len(self.filaTempoReal) != 0:
             proc = self.filaTempoReal.pop(0)
+            self.criarProcesso(recursos, memoria, arquivos, proc)
 
-            #checa disponibilidade de recursos
-            if recursos.checarRecursos(proc) and memoria.checarMemoria(proc):
-                # Se os recursos estao disponivel:
-                # Atribui PID ao processo
-                if proc['PID'] == None:
-                    proc['PID'] = self.contPID
-                    self.executando = proc
-                    self.contPID += 1
-
-                # Alocar gerenRecursos
-                print("Alocando recursos...")
-                recursos.alocarRecurso(proc)
-                recursos.imprimirRecursos()
-                print("Alocando memoria...")
-                memoria.alocarMemoria(proc)
-
-                print("montar processo")
-                self.imprimirProcesso(proc)
-                PID     = proc['PID']
-                print('process {} =>'.format(proc['PID']))
-                print('P{} STARTED'.format(proc['PID']))
-
-                aux = arquivos.executaOperacao(proc)
-                # Se nao tiver mais operacoes a executar mata o processo
-                if not aux:
-                    self.matarprocesso(recursos, memoria, proc)
-
-            else:
-                proc['tempo_inicial'] = proc['tempo_inicial'] + 1
-                #self.filaProcessosProntos.append(proc)
-                # se nao disponivel, coloca o processo de volta na fila de pronto
-                #print("Nao ha recurso ou memoria para executar o processo!")
-                print("mandar processo para final da fila")
-
-            self.filaProcessosProntos.insert(0, proc)
         elif len(self.prioridade_1) != 0:
             proc = self.prioridade_1.pop(0)
+            self.criarProcesso(recursos, memoria, arquivos, proc)
         elif len(self.prioridade_2) != 0:
             proc = self.prioridade_2.pop(0)
+            self.criarProcesso(recursos, memoria, arquivos, proc)
         elif len(self.prioridade_3) != 0:
             proc = self.prioridade_3.pop(0)
+            self.criarProcesso(recursos, memoria, arquivos, proc)
         else:
             ########## RETIRAR PRINT !!!!!!!! Caso seja falso no loop
-            print("preencher else")
+            return
 
     def matarprocesso(self, recursos, memoria, processo):
         aux = False
+        print(processo)
         if processo in self.filaProcessosProntos:
             self.filaProcessosProntos.remove(processo)
+            if self.executando == processo:
+                self.executando = None
             aux = True
         if processo in self.filaTempoReal:
             self.filaTempoReal.remove(processo)
+            print('Antes')
+            if self.executando == processo:
+                print('depois')
+                self.executando = None
+
             aux = True
         if processo in self.prioridade_1:
             self.prioridade_1.remove(processo)
+            if self.executando == processo:
+                self.executando = None
             aux = True
         if processo in self.prioridade_2:
             self.prioridade_2.remove(processo)
+            if self.executando == processo:
+                self.executando = None
             aux = True
         if processo in self.prioridade_3:
             self.prioridade_3.remove(processo)
+            if self.executando == processo:
+                self.executando = None
             aux = True
         if aux:
             recursos.desalocarRecurso(processo)
@@ -134,5 +175,6 @@ class GerenciadorProcessos:
             # Se nao tiver mais operacoes a executar mata o processo
             if not aux:
                 self.matarprocesso(recursos, memoria, self.executando)
+                self.escalonarProcesso(recursos, memoria, arquivos)
         else:
             self.escalonarProcesso(recursos, memoria, arquivos)
