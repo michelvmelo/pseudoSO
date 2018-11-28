@@ -42,19 +42,20 @@ class GerenciadorProcessos:
     ''' Tira os processos da fila de pronto e insere na Fila de     '''
     ''' Processos de Prioridade ou na fila de Processos de Tempo Real  '''
     def separarProcesso(self, processo):
-        print(processo)
-        if processo['prioridade'] == 0 and len(self.filaTempoReal) < 1000:
+        #print(processo)
+        if (processo['prioridade'] == 0 and len(self.filaTempoReal) < 1000):
             self.filaTempoReal.append(processo)
-        elif processo['prioridade'] == 1 and len(self.prioridade_1) < 1000:
+        elif (processo['prioridade'] == 1 and len(self.prioridade_1) < 1000):
+            prin("teste")
             self.prioridade_1.append(processo)
-        elif processo['prioridade'] == 2 and len(self.prioridade_2) < 1000:
+        elif (processo['prioridade'] == 2 and len(self.prioridade_2) < 1000):
             self.prioridade_2.append(processo)
-        elif processo['prioridade'] == 3 and len(self.prioridade_3) < 1000:
+        elif (processo['prioridade'] == 3 and len(self.prioridade_3) < 1000):
             self.prioridade_3.append(processo)
         else:
             raise Exception("Capacidade maxima de processos atingida!!!! MAIOR QUE 1000!!!!")
 
-    def escalonarProcesso(self, recursos, memoria):
+    def escalonarProcesso(self, recursos, memoria, arquivos):
         #seleciona o processo de maior prioridade
         if len(self.filaTempoReal) != 0:
             proc = self.filaTempoReal.pop(0)
@@ -63,7 +64,9 @@ class GerenciadorProcessos:
             if recursos.checarRecursos(proc) and memoria.checarMemoria(proc):
                 # Se os recursos estao disponivel:
                 # Atribui PID ao processo
-                proc['PID'] = self.contPID
+                if proc['PID'] == None:
+                    proc['PID'] = self.contPID
+                    self.contPID += 1
 
                 # Alocar gerenRecursos
                 print("Alocando recursos...")
@@ -73,7 +76,16 @@ class GerenciadorProcessos:
 
                 print("montar processo")
                 self.imprimirProcesso(proc)
+
+                #executar Processo
+                #operacoes = [x for x in arquivos.listaOperacoes if x['idProcesso'] == proc['PID']]
+                arquivos.executaOperacao(proc)
+
+                recursos.desalocarRecurso(proc)
+                memoria.desalocaMemoria(proc)
             else:
+                proc['tempo_inicial'] = proc['tempo_inicial'] + 1
+                #self.filaProcessosProntos.append(proc)
                 # se nao disponivel, coloca o processo de volta na fila de pronto
                 #print("Nao ha recurso ou memoria para executar o processo!")
                 print("mandar processo para final da fila")
@@ -90,6 +102,6 @@ class GerenciadorProcessos:
             print("preencher else")
 
 
-    def executarProcesso(self, recursos, memoria):
-        self.escalonarProcesso(recursos, memoria)
+    def executarProcesso(self, recursos, memoria, arquivos):
+        self.escalonarProcesso(recursos, memoria, arquivos)
         print("funcao executarProcesso")

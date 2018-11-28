@@ -39,6 +39,7 @@ def operacao(n, sema):
     print("Operacao", n)
 
 def main():
+    process_file, files_file = 'processes.txt', 'files.txt'
     if len(sys.argv) > 2:
         # Lembrar de verificar a estrutura dos arquivos ???????
         arqProcessos    = open(sys.argv[1], "r")
@@ -50,37 +51,44 @@ def main():
         #print listaArquivos
 
         gerenArquivos.inicializarDisco()
-        
-        #tempo = 0
-        #while (1):
-            #while (gerenArquivos.filaProcessosProntos):
-                #if(gerenArquivos.filaProcessosProntos[0]['tempo_inicial') == tempo)
-        gerenArquivos.criarArquivo("x", 1, 1)
-        #gerenArquivos.opera_processo(gerenProcessos.executando)
-        
+
         ####TESTE INICIO#######
         proc = gerenProcessos.filaProcessosProntos.pop(0)
         gerenProcessos.separarProcesso(proc)
-        gerenProcessos.executarProcesso(gerenRecursos, gerenMemoria)
+        gerenProcessos.executarProcesso(gerenRecursos, gerenMemoria, gerenArquivos)
 
         proc = gerenProcessos.filaProcessosProntos.pop(0)
         gerenProcessos.separarProcesso(proc)
-        gerenProcessos.executarProcesso(gerenRecursos, gerenMemoria)
+        gerenProcessos.executarProcesso(gerenRecursos, gerenMemoria, gerenArquivos)
         ####TESTE FIM#######
 
         tempoAtual = 0
         # cria threads que representam os processos e as deixa travadas
         # aguardando a liberacao de um release()
 
-        """
         #laco de tempo, cada volta representa um segundo
-        while(len(gerenProcessos.filaProcessosProntos) != 0 ):
-            #Separa os processos por prioridade no tempo atual
+        """while(len(gerenProcessos.filaProcessosProntos) != 0 ):
+            #print('\n\n')
+            #print("Tempo", tempoAtual)
+
             while (len(gerenProcessos.filaProcessosProntos) != 0 and gerenProcessos.filaProcessosProntos[0]['tempo_inicial'] <= tempoAtual):
                 proc = gerenProcessos.filaProcessosProntos.pop(0)
                 gerenProcessos.separarProcesso(proc)
 
             gerenProcessos.executarProcesso(gerenRecursos, gerenMemoria)
+
+            #print("Fila Prontos", gerenProcessos.filaProcessosProntos)
+            #print("Fila Real", gerenProcessos.filaTempoReal)
+            #print("Fila prio 1", gerenProcessos.prioridade_1)
+            #print("Fila prio 2", gerenProcessos.prioridade_2)
+            #print("Fila prio 3", gerenProcessos.prioridade_3)
+            tempoAtual += 1
+
+
+
+            #Separa os processos por prioridade no tempo atual
+
+
             #gerenProcessos.executarProcesso(gerenRecursos, gerenMemoria)
             tempoAtual += 1 # avanca um segundo no tempo
             print("tempo:", tempoAtual)

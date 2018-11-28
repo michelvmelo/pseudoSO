@@ -23,7 +23,6 @@ class GerenciadorMemoria:
             # Acha blocos continuos com marcados com mesmo PID ou com -1
             for k, g in groupby(enumerate(memReal), itemgetter(1)):
                 bloco = map(itemgetter(1), g)
-                #print map(itemgetter(1), g)
                 if len(bloco) >= processo['blocos_mem'] and bloco[0] == -1:
                     processo['offset'] = offset
                     return True
@@ -66,5 +65,5 @@ class GerenciadorMemoria:
         ini = processo['offset']
         fim = ini + processo['blocos_mem']
 
-        self.memoria[ini:fim] = blocos*[-1]
+        self.memoria[ini:fim] = processo['blocos_mem']*[-1]
         self.desalocarMutex.release()
