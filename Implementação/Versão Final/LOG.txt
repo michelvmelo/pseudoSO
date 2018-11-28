@@ -1,0 +1,184 @@
+P0 alocou impressora 0
+P1 alocou impressora 0
+[-] Falha ao deletar o arquivo A. PID = 1 - OP1
+[+] Arquivo X deletado com sucesso. PID = 1 - OP2
+[+] Arquivo B adicionado com sucesso. PID = 1 - OP3 dos blocos 0 ao 1.
+[+] Arquivo D adicionado com sucesso. PID = 1 - OP4 dos blocos 6 ao 8.
+[-] Falha ao deletar o arquivo E. PID = 2 - OP1
+-----------------FINAL DA EXECUÇÃO-----------------
+P0 alocou impressora 0
+P1 alocou impressora 0
+[-] Falha ao deletar o arquivo A. PID = 1 - OP1
+[+] Arquivo X deletado com sucesso. PID = 1 - OP2
+[+] Arquivo B adicionado com sucesso. PID = 1 - OP3 dos blocos 0 ao 1.
+[+] Arquivo D adicionado com sucesso. PID = 1 - OP4 dos blocos 6 ao 8.
+[-] Falha ao deletar o arquivo E. PID = 2 - OP1
+-----------------FINAL DA EXECUÇÃO-----------------
+P0 alocou impressora 0
+P1 alocou impressora 0
+[-] Falha ao deletar o arquivo A. PID = 1 - OP1
+[+] Arquivo X deletado com sucesso. PID = 1 - OP2
+[+] Arquivo B adicionado com sucesso. PID = 1 - OP3 dos blocos 0 ao 1.
+[+] Arquivo D adicionado com sucesso. PID = 1 - OP4 dos blocos 6 ao 8.
+[-] Falha ao deletar o arquivo E. PID = 2 - OP1
+-----------------FINAL DA EXECUÇÃO-----------------
+P0 alocou impressora 0
+P0 alocou impressora 0
+P0 alocou SATA 0
+P3 alocou SATA 1
+[-] Falha ao deletar o arquivo A. PID = 1 - OP1
+[+] Arquivo X deletado com sucesso. PID = 1 - OP2
+[+] Arquivo B adicionado com sucesso. PID = 1 - OP3 dos blocos 0 ao 1.
+[+] Arquivo D adicionado com sucesso. PID = 1 - OP4 dos blocos 6 ao 8.
+[-] Falha ao deletar o arquivo E. PID = 2 - OP1
+P4 alocou impressora 0
+-----------------FINAL DA EXECUÇÃO-----------------
+[+] Arquivo  B adicionado com sucesso. PID = 0 - OP1 dos blocos 6 ao 7.
+[-] Falha ao deletar o arquivo  D. PID = 0 - OP2
+[-] Falha ao deletar o arquivo. D, PID = 0 - OP3
+[+] Arquivo  L adicionado com sucesso. PID = 0 - OP4 dos blocos 2 ao 2.
+[-] Falha ao deletar o arquivo  A. PID = 1 - OP1
+[-] Falha ao deletar o arquivo. X, PID = 1 - OP2
+[-] Falha ao deletar o arquivo  D. PID = 1 - OP3
+-----------------FINAL DA EXECUÇÃO-----------------
+P0 alocou impressora 0
+P1 alocou impressora 0
+[-] Falha ao deletar o arquivo A. PID = 1 - OP1
+[+] Arquivo X deletado com sucesso. PID = 1 - OP2
+[+] Arquivo B adicionado com sucesso. PID = 1 - OP3 dos blocos 0 ao 1.
+[+] Arquivo D adicionado com sucesso. PID = 1 - OP4 dos blocos 6 ao 8.
+[-] Falha ao deletar o arquivo E. PID = 2 - OP1
+-----------------FINAL DA EXECUÇÃO-----------------
+P0 alocou impressora 0
+P1 alocou impressora 0
+[-] Falha ao deletar o arquivo A. PID = 1 - OP1
+[+] Arquivo X deletado com sucesso. PID = 1 - OP2
+[+] Arquivo B adicionado com sucesso. PID = 1 - OP3 dos blocos 0 ao 1.
+[+] Arquivo D adicionado com sucesso. PID = 1 - OP4 dos blocos 6 ao 8.
+[-] Falha ao deletar o arquivo E. PID = 2 - OP1
+-----------------FINAL DA EXECUÇÃO-----------------
+P0 alocou impressora 0
+P1 alocou impressora 0
+[-] Falha ao deletar o arquivo A. PID = 1 - OP1
+[+] Arquivo X deletado com sucesso. PID = 1 - OP2
+[+] Arquivo B adicionado com sucesso. PID = 1 - OP3 dos blocos 0 ao 1.
+[+] Arquivo D adicionado com sucesso. PID = 1 - OP4 dos blocos 6 ao 8.
+[-] Falha ao deletar o arquivo E. PID = 2 - OP1
+-----------------FINAL DA EXECUÇÃO-----------------
+P0 alocou impressora 0
+P1 alocou impressora 0
+[-] Falha ao deletar o arquivo A. PID = 1 - OP1
+[+] Arquivo X deletado com sucesso. PID = 1 - OP2
+[+] Arquivo B adicionado com sucesso. PID = 1 - OP3 dos blocos 0 ao 1.
+[+] Arquivo D adicionado com sucesso. PID = 1 - OP4 dos blocos 6 ao 8.
+[-] Falha ao deletar o arquivo E. PID = 2 - OP1
+-----------------FINAL DA EXECUÇÃO-----------------
+P0 alocou impressora 0
+P1 alocou impressora 0
+[-] Falha ao deletar o arquivo A. PID = 1 - OP1
+[+] Arquivo X deletado com sucesso. PID = 1 - OP2
+[+] Arquivo B adicionado com sucesso. PID = 1 - OP3 dos blocos 0 ao 1.
+[+] Arquivo D adicionado com sucesso. PID = 1 - OP4 dos blocos 6 ao 8.
+[-] Falha ao deletar o arquivo E. PID = 2 - OP1
+-----------------FINAL DA EXECUÇÃO-----------------
+P0 alocou impressora 0
+P1 alocou impressora 0
+[-] Falha ao deletar o arquivo A. PID = 1 - OP1
+[+] Arquivo X deletado com sucesso. PID = 1 - OP2
+[+] Arquivo B adicionado com sucesso. PID = 1 - OP3 dos blocos 0 ao 1.
+[+] Arquivo D adicionado com sucesso. PID = 1 - OP4 dos blocos 6 ao 8.
+[-] Falha ao deletar o arquivo E. PID = 2 - OP1
+-----------------FINAL DA EXECUÇÃO-----------------
+P0 alocou impressora 0
+P1 alocou impressora 0
+
+[-] Falha ao deletar o arquivo A. PID = 1 - OP1
+[+] Arquivo X deletado com sucesso. PID = 1 - OP2
+[+] Arquivo B adicionado com sucesso. PID = 1 - OP3 dos blocos 0 ao 1.
+[+] Arquivo D adicionado com sucesso. PID = 1 - OP4 dos blocos 6 ao 8.
+
+[-] Falha ao deletar o arquivo E. PID = 2 - OP1
+-----------------FINAL DA EXECUÇÃO-----------------
+P0 alocou impressora 0
+P1 alocou impressora 0
+
+[-] Falha ao deletar o arquivo A. PID = 1 - OP1
+[+] Arquivo X deletado com sucesso. PID = 1 - OP2
+[+] Arquivo B adicionado com sucesso. PID = 1 - OP3 dos blocos 0 ao 1.
+[+] Arquivo D adicionado com sucesso. PID = 1 - OP4 dos blocos 6 ao 8.
+
+[-] Falha ao deletar o arquivo E. PID = 2 - OP1
+-----------------FINAL DA EXECUÇÃO-----------------
+P0 alocou impressora 0
+P1 alocou impressora 0
+
+[-] Falha ao deletar o arquivo A. OP1
+[+] Arquivo X deletado com sucesso. OP2
+[+] Arquivo B adicionado com sucesso. OP3 dos blocos 0 ao 1.
+[+] Arquivo D adicionado com sucesso. OP4 dos blocos 6 ao 8.
+
+[-] Falha ao deletar o arquivo E. OP1
+-----------------FINAL DA EXECUÇÃO-----------------
+P0 alocou impressora 0
+P1 alocou impressora 0
+
+[-] Falha ao deletar o arquivo A. OP1
+[+] Arquivo X deletado com sucesso. OP2
+[+] Arquivo B adicionado com sucesso. OP3 dos blocos 0 ao 1.
+[+] Arquivo D adicionado com sucesso. OP4 dos blocos 6 ao 8.
+
+[-] Falha ao deletar o arquivo E. OP1
+-----------------FINAL DA EXECUÇÃO-----------------
+P0 alocou impressora 0
+P1 alocou impressora 0
+
+[-] Falha ao deletar o arquivo A. OP1
+[+] Arquivo X deletado com sucesso. OP2
+[+] Arquivo B adicionado com sucesso. OP3 dos blocos 0 ao 1.
+[+] Arquivo D adicionado com sucesso. OP4 dos blocos 6 ao 8.
+
+[-] Falha ao deletar o arquivo E. OP1
+-----------------FINAL DA EXECUÇÃO-----------------
+P0 alocou impressora 0
+P1 alocou impressora 0
+
+[-] Falha ao deletar o arquivo A. OP1
+[+] Arquivo X deletado com sucesso. OP2
+[+] Arquivo B adicionado com sucesso. OP3 dos blocos 0 ao 1.
+[+] Arquivo D adicionado com sucesso. OP4 dos blocos 6 ao 8.
+
+[-] Falha ao deletar o arquivo E. OP1
+P0 alocou impressora 0
+P1 alocou impressora 0
+
+[-] Falha ao deletar o arquivo A. OP1
+[+] Arquivo X deletado com sucesso. OP2
+[+] Arquivo B adicionado com sucesso. OP3 dos blocos 0 ao 1.
+[+] Arquivo D adicionado com sucesso. OP4 dos blocos 6 ao 8.
+
+[-] Falha ao deletar o arquivo E. OP1
+P0 alocou impressora 0
+P1 alocou impressora 0
+
+[-] Falha ao deletar o arquivo A. OP1
+[+] Arquivo X deletado com sucesso. OP2
+[+] Arquivo B adicionado com sucesso. OP3 dos blocos 0 ao 1.
+[+] Arquivo D adicionado com sucesso. OP4 dos blocos 6 ao 8.
+
+[-] Falha ao deletar o arquivo E. OP1
+P0 alocou impressora 0
+P1 alocou impressora 0
+
+[-] Falha ao deletar o arquivo A. OP1
+[+] Arquivo X deletado com sucesso. OP2
+[+] Arquivo B adicionado com sucesso. OP3 dos blocos 0 ao 1.
+[+] Arquivo D adicionado com sucesso. OP4 dos blocos 6 ao 8.
+
+[-] Falha ao deletar o arquivo E. OP1
+
+[-] Falha ao deletar o arquivo A. OP1
+[+] Arquivo X deletado com sucesso. OP2
+[+] Arquivo B adicionado com sucesso. OP3 dos blocos 0 ao 1.
+[+] Arquivo D adicionado com sucesso. OP4 dos blocos 6 ao 8.
+
+[-] Falha ao deletar o arquivo E. OP1
