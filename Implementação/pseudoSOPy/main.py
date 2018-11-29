@@ -20,7 +20,7 @@ def lerArqProcessos(arquivo):
     #cria um dicionario para acessar as informacoes dos processos
     processos = [mp.Processo(proc).__dict__ for proc in lista_processos]
     # insere os precessos na fila de pronto por ordem de tempo de inicializacao
-    gerenProcessos.filaProcessosProntos = sorted(processos, key = itemgetter('tempo_inicial'))
+    gerenProcessos.listaProcessos = sorted(processos, key = itemgetter('tempo_inicial'))
     #print(gerenProcessos.filaProcessosProntos)
 
 # Le o arquivo do sistema de arquivos
@@ -30,8 +30,7 @@ def lerArqSistemaArquivos(arquivo):
     gerenArquivos.numeroBlocos    = int(infoSisArq[0][0])
     gerenArquivos.numeroSegmentos = int(infoSisArq[1][0])
     gerenArquivos.listaArquivos   = [ma.Arquivo(infoSisArq[x]).__dict__ for x in range(2, gerenArquivos.numeroSegmentos + 2)]
-    operacoes                     = [ma.Operacao(infoSisArq[x]).__dict__ for x in range(gerenArquivos.numeroSegmentos + 2, len(infoSisArq))]
-    gerenArquivos.listaOperacoes  = sorted(operacoes, key = itemgetter('idProcesso'))
+    gerenArquivos.listaOperacoes  = [ma.Operacao(infoSisArq[x]).__dict__ for x in range(gerenArquivos.numeroSegmentos + 2, len(infoSisArq))]
     gerenArquivos.numerarOperacoes()
     #print(gerenArquivos.listaArquivos)
     #print(gerenArquivos.listaOperacoes)
@@ -54,25 +53,92 @@ def main():
         gerenArquivos.inicializarDisco()
 
         tempo = 0
-        #for n in range(20):
-        while (len(gerenProcessos.filaProcessosProntos) > 0):
-            print 'TEMPO: {}'.format(tempo)
+        for n in range(20):
+        #while True:
 
-            if gerenProcessos.executando:
-                aux = gerenArquivos.executaOperacao(gerenProcessos, gerenProcessos.executando)
-                if not aux:
-                    gerenProcessos.matarprocesso(gerenRecursos, gerenMemoria, gerenProcessos.executando)
-                    gerenProcessos.escalonarProcesso(gerenRecursos, gerenMemoria, gerenArquivos)
+            maiorPrioridade = None
 
-            else:
-                #print gerenProcessos.filaProcessosProntos
-                prs = [pr for pr in gerenProcessos.filaProcessosProntos if pr['tempo_inicial'] <= tempo]
-                if len(prs) > 0:
-                    gerenProcessos.filaProcessosProntos.remove(prs[0])
-                    gerenProcessos.separarProcesso(prs[0])
-                    gerenProcessos.escalonarProcesso(gerenRecursos, gerenMemoria, gerenArquivos)
+            if len(gerenProcessos.listaProcessos) == 0 and len(gerenProcessos.filaProcessosProntos) == 0 and len(gerenArquivos.listaOperacoes) == 0:
+                break
+
+            l  = [pr for pr in gerenProcessos.listaProcessos if pr['tempo_inicial'] == tempo]
+            gerenProcessos.filaProcessosProntos = gerenProcessos.filaProcessosProntos + l
+            gerenProcessos.listaProcessos = [x for x in gerenProcessos.listaProcessos if x['tempo_inicial'] != tempo]
+
+
+            # Escalonador de processo
+            if len(gerenProcessos.filaProcessosProntos) > 0 or gerenProcessos.executando:
+                print 'TEMPO: {}'.format(tempo)
+                if len(gerenProcessos.filaProcessosProntos) > 0:
+                    #print gerenProcessos.filaProcessosProntos
+                    naoExecutados = [x for x in gerenProcessos.filaProcessosProntos if x['PID'] == None]
+                    if len(naoExecutados) > 0:
+                        maiorPrioridade = min(naoExecutados, key=lambda x:x['prioridade'])
+                    else:
+                        maiorPrioridade = gerenProcessos.filaProcessosProntos[0]
+
+                    #print maiorPrioridade
+                    #gerenProcessos.filaProcessosProntos = [x for x in gerenProcessos.filaProcessosProntos if x != maiorPrioridade]
+                    #print gerenProcessos.filaProcessosProntos
+                    #print gerenProcessos.filaProcessosProntos
+
+                    if gerenProcessos.executando:
+                        #print 1
+                        if maiorPrioridade['prioridade'] < gerenProcessos.executando['prioridade']:
+                            #print 2
+                            if gerenArquivos.verificarOperacoes(gerenProcessos.executando['PID']):
+                                #print 3
+                                gerenProcessos.filaProcessosProntos.append(gerenProcessos.executando)
+                                gerenProcessos.desalocar(gerenRecursos, gerenMemoria, gerenProcessos.executando)
+                                gerenProcessos.criarProcesso(gerenRecursos, gerenMemoria, gerenArquivos, maiorPrioridade)
+                            else:
+                                #print 4
+                                if maiorPrioridade['PID']:
+                                    #print 5
+                                    gerenArquivos.executaOperacao(gerenRecursos, gerenMemoria, gerenProcessos, maiorPrioridade)
+                                else:
+                                    #print 6
+                                    gerenProcessos.criarProcesso(gerenRecursos, gerenMemoria, gerenArquivos, maiorPrioridade)
+                        else:
+                            print 7
+                            if gerenArquivos.verificarOperacoes(gerenProcessos.executando['PID']):
+                                #print 8
+                                gerenArquivos.executaOperacao(gerenRecursos, gerenMemoria, gerenProcessos, gerenProcessos.executando)
+                            else:
+                                #print 9
+                                gerenProcessos.desalocar(gerenRecursos, gerenMemoria, gerenProcessos.executando)
+                                if maiorPrioridade['PID']:
+                                    #print 10
+                                    gerenArquivos.executaOperacao(gerenRecursos, gerenMemoria, gerenProcessos, maiorPrioridade)
+                                else:
+                                    #print 11
+                                    gerenProcessos.criarProcesso(gerenRecursos, gerenMemoria, gerenArquivos, maiorPrioridade)
+                    else:
+                        #print 12
+                        if maiorPrioridade['PID']:
+                            #print 13
+                            if gerenArquivos.verificarOperacoes(maiorPrioridade['PID']):
+                                #print 14
+                                gerenArquivos.executaOperacao(gerenRecursos, gerenMemoria, gerenProcessos, maiorPrioridade)
+                            else:
+                                #print 16
+                                gerenProcessos.desalocar(gerenRecursos, gerenMemoria, maiorPrioridade)
+                                gerenProcessos.filaProcessosProntos.remove(maiorPrioridade)
+                        else:
+                            #print 15
+                            gerenProcessos.criarProcesso(gerenRecursos, gerenMemoria, gerenArquivos, maiorPrioridade)
+                else:
+                    #print 16
+                    if gerenArquivos.verificarOperacoes(gerenProcessos.executando['PID']):
+                        #print 17
+                        gerenArquivos.executaOperacao(gerenRecursos, gerenMemoria, gerenProcessos, gerenProcessos.executando)
+                    else:
+                        #print 17
+                        break
 
             tempo += 1
+
+            #print gerenArquivos.listaOperacoes
         gerenArquivos.imprimirDisco()
     else:
         print ("Para rodar corretamente o sistema digite: main.py + 'nome do arquivo de processos' + 'nome do arquivo de arquivos'")

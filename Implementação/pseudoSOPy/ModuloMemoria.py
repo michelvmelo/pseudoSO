@@ -35,6 +35,7 @@ class GerenciadorMemoria:
                 offset = offset + len(bloco)
 
         print("Nao ha memoria suficiente para executar o processo")
+        
         return False
 
     def alocarMemoria(self, processo):

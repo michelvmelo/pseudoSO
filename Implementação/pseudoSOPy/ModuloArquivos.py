@@ -42,6 +42,13 @@ class GerenciadorArquivos:
             op['idOperacao'] = x
             x +=1
 
+    def verificarOperacoes(self, ID):
+        bool = [x for x in self.listaOperacoes if x['idProcesso'] == ID]
+        if len(bool) > 0:
+            return True
+        else:
+            return False
+
     ''' Inicializa o disco com as informacos de entrada'''
     def inicializarDisco(self):
         # criando um disco com a quantidade de blocos fornecidos na entrada
@@ -50,7 +57,7 @@ class GerenciadorArquivos:
             # Preenche os blocos do disco com o nome dos arquivos de entrada correspondente
             self.disco[arquivos['primeiroBloco']:arquivos['primeiroBloco'] + arquivos['quantidadeBlocos']] = arquivos['quantidadeBlocos'] *[arquivos['nome']]
 
-    def executaOperacao(self, gerenProcesso, processo):
+    def executaOperacao(self, recursos, memoria, gerenProcesso, processo):
         #SELECIONA OPERACOES DO PROCESSO
         ops = [op for op
                 in self.listaOperacoes
@@ -84,12 +91,14 @@ class GerenciadorArquivos:
                     print 'Operação {} => Falha'.format(op['idOperacao'])
                     print 'O numero de blocos solicitados é maior que o existente em disco.\n'
                     return False
+                    #return True
                 # Verifica se o Arquivo ja existe em disco
                 elif existeArq:
                     # Se existe retira a operacao da lista de operacoes
                     operacao = self.listaOperacoes.remove(op)
                     print 'Operação {} => Falha'.format(op['idOperacao'])
                     print('O processo {} não pode criar o arquivo {} (Ja existe em disco).\n'.format(processo['PID'], nomeArquivo))
+                    return False
                 else:
 
                     for k, g in groupby(enumerate(self.disco), itemgetter(1)):
@@ -111,8 +120,8 @@ class GerenciadorArquivos:
                         # Manda processo p o fim da fila
                         if op['controlador'] < 1:
                             self.listaOperacoes.append(op)
+                            gerenProcesso.enviarFimFila(recursos, memoria, processo)
                             op['controlador'] += 1
-
                         else:
                             self.listaOperacoes.remove(op)
 
@@ -142,4 +151,4 @@ class GerenciadorArquivos:
         else:# Se nao houver operacao a ser executada
             #Vai matar o processo e desalocar recursos e memoria
             print 'Nao há mais operação a ser executado pelo processo {}.\n'.format(processo['PID'])
-            return False
+            return True
