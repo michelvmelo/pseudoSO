@@ -66,15 +66,12 @@ def main():
             else:
                 #print gerenProcessos.filaProcessosProntos
                 prs = [pr for pr in gerenProcessos.filaProcessosProntos if pr['tempo_inicial'] <= tempo]
-
-                #for pr in prs:
                 gerenProcessos.filaProcessosProntos.remove(pr)
                 gerenProcessos.separarProcesso(pr)
-
                 gerenProcessos.escalonarProcesso(gerenRecursos, gerenMemoria, gerenArquivos)
 
             tempo += 1
-
+        gerenArquivos.imprimirDisco()
     else:
         print ("Para rodar corretamente o sistema digite: main.py + 'nome do arquivo de processos' + 'nome do arquivo de arquivos'")
 

@@ -29,6 +29,12 @@ class GerenciadorArquivos:
     log = []
     arquivos = []
 
+    def imprimirDisco(self):
+        str = "| "
+        for n in self.disco:
+            str += "{} ".format(n)
+        str += "|"
+        print str
     def numerarOperacoes(self):
         x = 1
         for op in self.listaOperacoes:
@@ -42,9 +48,6 @@ class GerenciadorArquivos:
         for arquivos in self.listaArquivos:
             # Preenche os blocos do disco com o nome dos arquivos de entrada correspondente
             self.disco[arquivos['primeiroBloco']:arquivos['primeiroBloco'] + arquivos['quantidadeBlocos']] = arquivos['quantidadeBlocos'] *[arquivos['nome']]
-
-    def deletarArquivo(self, arquivos):
-        self.disco[arquivos['primeiroBloco']:arquivos['primeiroBloco'] + arquivos['quantidadeBlocos']] = arquivos['quantidadeBlocos'] *[-1]
 
     def executaOperacao(self, processo):
         #SELECIONA OPERACOES DO PROCESSO
