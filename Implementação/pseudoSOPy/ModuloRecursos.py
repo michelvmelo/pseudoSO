@@ -45,7 +45,7 @@ class GerenciadorRecursos:
             disponibilidade = False
         if disco > 2 or disco < 0:
             disponibilidade = False
-        
+
         return disponibilidade
 
     def alocarRecurso(self, processo):
@@ -87,3 +87,4 @@ class GerenciadorRecursos:
             self.impressora1 = None
         if self.impressora2 == PID:
             self.impressora2 = None
+        

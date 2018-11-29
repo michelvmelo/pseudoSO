@@ -53,12 +53,12 @@ def main():
         gerenArquivos.inicializarDisco()
 
         tempo = 0
-        for n in range(20):
-        #while True:
+        #for n in range(20):
+        while True:
 
             maiorPrioridade = None
 
-            if len(gerenProcessos.listaProcessos) == 0 and len(gerenProcessos.filaProcessosProntos) == 0 and len(gerenArquivos.listaOperacoes) == 0:
+            if len(gerenProcessos.listaProcessos) == 0 and len(gerenProcessos.filaProcessosProntos) == 0 and gerenProcessos.executando == None:
                 break
 
             l  = [pr for pr in gerenProcessos.listaProcessos if pr['tempo_inicial'] == tempo]
@@ -100,7 +100,7 @@ def main():
                                     #print 6
                                     gerenProcessos.criarProcesso(gerenRecursos, gerenMemoria, gerenArquivos, maiorPrioridade)
                         else:
-                            print 7
+                            #print 7
                             if gerenArquivos.verificarOperacoes(gerenProcessos.executando['PID']):
                                 #print 8
                                 gerenArquivos.executaOperacao(gerenRecursos, gerenMemoria, gerenProcessos, gerenProcessos.executando)
@@ -121,20 +121,24 @@ def main():
                                 #print 14
                                 gerenArquivos.executaOperacao(gerenRecursos, gerenMemoria, gerenProcessos, maiorPrioridade)
                             else:
-                                #print 16
+                                #print 15
                                 gerenProcessos.desalocar(gerenRecursos, gerenMemoria, maiorPrioridade)
-                                gerenProcessos.filaProcessosProntos.remove(maiorPrioridade)
+                                gerenProcessos.filaProcessosProntos = [x for x in gerenProcessos.filaProcessosProntos if x != maiorPrioridade]
                         else:
-                            #print 15
+                            #print 16
                             gerenProcessos.criarProcesso(gerenRecursos, gerenMemoria, gerenArquivos, maiorPrioridade)
                 else:
-                    #print 16
+                    #print 17
+
                     if gerenArquivos.verificarOperacoes(gerenProcessos.executando['PID']):
-                        #print 17
+                        #print 18
                         gerenArquivos.executaOperacao(gerenRecursos, gerenMemoria, gerenProcessos, gerenProcessos.executando)
+                    elif len(gerenProcessos.listaProcessos) == 0:
+                        break
                     else:
                         #print 17
-                        break
+                        tempo += 1
+                        continue
 
             tempo += 1
 

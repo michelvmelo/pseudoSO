@@ -43,6 +43,7 @@ class GerenciadorArquivos:
             x +=1
 
     def verificarOperacoes(self, ID):
+
         bool = [x for x in self.listaOperacoes if x['idProcesso'] == ID]
         if len(bool) > 0:
             return True
