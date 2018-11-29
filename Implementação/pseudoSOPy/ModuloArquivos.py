@@ -52,6 +52,7 @@ class GerenciadorArquivos:
                 in self.listaOperacoes
                 if op['idProcesso'] == processo['PID']
               ]
+
         if ops:
             if processo['contInstrucao'] is None:
                 processo['contInstrucao'] = 1
@@ -105,6 +106,14 @@ class GerenciadorArquivos:
                         # ???????????? Manda processo para o fim da fila
                         # Ou so retira a operacao da lista de operacoes
                         self.listaOperacoes.remove(op)
+                        ###### FAZER FUNCAO P MANDAR PROCESSO FINAL DA FILA
+
+
+
+
+
+
+
                         print 'Operação {} => Falha'.format(op['idOperacao'])
                         print('O processo {} não pode criar o arquivo {} (falta de espaço).\n'.format(processo['PID'], nomeArquivo))        #Se é operacao de deletar Arquivo
             ##### OPERACAO PARA DELETAR ARQUIVO ##############

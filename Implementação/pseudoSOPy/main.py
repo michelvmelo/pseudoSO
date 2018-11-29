@@ -64,12 +64,15 @@ def main():
                     gerenProcessos.escalonarProcesso(gerenRecursos, gerenMemoria, gerenArquivos)
 
             else:
+                #print gerenProcessos.filaProcessosProntos
                 prs = [pr for pr in gerenProcessos.filaProcessosProntos if pr['tempo_inicial'] <= tempo]
-                for pr in prs:
-                    gerenProcessos.filaProcessosProntos.remove(pr)
-                    gerenProcessos.separarProcesso(pr)
+
+                #for pr in prs:
+                gerenProcessos.filaProcessosProntos.remove(pr)
+                gerenProcessos.separarProcesso(pr)
 
                 gerenProcessos.escalonarProcesso(gerenRecursos, gerenMemoria, gerenArquivos)
+
             tempo += 1
 
     else:
