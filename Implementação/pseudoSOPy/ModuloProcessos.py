@@ -52,7 +52,7 @@ class GerenciadorProcessos:
         elif (processo['prioridade'] == 3 and len(self.prioridade_3) < 1000):
             self.prioridade_3.append(processo)
         else:
-            print(processo)
+            #print(processo)
             print("Capacidade maxima de processos atingida!!!! MAIOR QUE 1000!!!!")
 
     def criarProcesso(self, recursos, memoria, arquivos, proc):
@@ -77,7 +77,7 @@ class GerenciadorProcessos:
             print('process {} =>'.format(proc['PID']))
             print('P{} STARTED'.format(proc['PID']))
 
-            aux = arquivos.executaOperacao(proc)
+            aux = arquivos.executaOperacao(self, proc)
             # Se nao tiver mais operacoes a executar mata o processo
             if not aux:
                 self.matarprocesso(recursos, memoria, proc)
@@ -85,19 +85,6 @@ class GerenciadorProcessos:
 
         else:
             proc['tempo_inicial'] = proc['tempo_inicial'] + 1
-
-            # Verifica as condicoes da indisponibilidade de memoria
-            if proc['prioridade'] == 0 and proc['blocos_mem'] > 64:
-                #self.filaTempoReal.remove(proc)
-                print 'O processo requer um tamanho de memoria maior que o disponivel.(Esse processo de nucleo nao sera executado nunca)\n'
-            elif proc['prioridade'] != 0 and proc['blocos_mem'] > 960:
-                #self.filaTempoReal.remove(proc)
-                print 'O processo requer um tamanho de memoria maior que o disponivel.(Esse processo de usuario nao sera executado nunca)\n'
-            else:
-                # Se nao existe espacao mas ele cabe na gerenMemoria
-                # Manda o processo para o fim da fila
-                #self.filaTempoReal.remove(proc)
-                self.filaProcessosProntos.append(proc)
 
             # Verifica as condicoes da indisponibilidade de recurso
             impressora      = proc['impressora']
@@ -108,9 +95,20 @@ class GerenciadorProcessos:
             boolScanner     = scanner != 1
             boolModem       = modem   != 1
             boolDisco       = disco > 2 or disco < 0
-            if boolImpressora or boolScanner or boolModem or boolDisco:
-                print 'Os recursos solicitados pelo processo nao existe no sistema!\n'
+            # Verifica as condicoes da indisponibilidade de memoria
+            if proc['prioridade'] == 0 and proc['blocos_mem'] > 64:
+                #self.filaTempoReal.remove(proc)
+                print 'O processo requer um tamanho de memoria maior que o disponivel.(Esse processo de nucleo nao sera executado nunca)\n'
+            elif proc['prioridade'] != 0 and proc['blocos_mem'] > 960:
+                #self.filaTempoReal.remove(proc)
+                print 'O processo requer um tamanho de memoria maior que o disponivel.(Esse processo de usuario nao sera executado nunca)\n'
+            elif boolImpressora or boolScanner or boolModem or boolDisco:
+                print 'Os recursos solicitados pelo processo nao existem no sistema!\n'
             else:
+                # Se nao existe espacao mas ele cabe na gerenMemoria
+                # Manda o processo para o fim da fila
+                #self.filaTempoReal.remove(proc)
+                
                 self.filaProcessosProntos.append(proc)
 
 
@@ -138,9 +136,9 @@ class GerenciadorProcessos:
         aux = False
         #print(processo)
         self.executando = None
-        if processo in self.filaProcessosProntos:
-            self.filaProcessosProntos.remove(processo)
-            aux = True
+        #if processo in self.filaProcessosProntos:
+        #    self.filaProcessosProntos.remove(processo)
+        #    aux = True
         if processo in self.filaTempoReal:
             self.filaTempoReal.remove(processo)
             aux = True
@@ -153,6 +151,7 @@ class GerenciadorProcessos:
         if processo in self.prioridade_3:
             self.prioridade_3.remove(processo)
             aux = True
-
+        if processo['offset'] != None:
+            memoria.desalocaMemoria(processo)
+            processo['offset'] = None
         recursos.desalocarRecurso(processo)
-        memoria.desalocaMemoria(processo)

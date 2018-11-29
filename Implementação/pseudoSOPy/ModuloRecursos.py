@@ -45,8 +45,7 @@ class GerenciadorRecursos:
             disponibilidade = False
         if disco > 2 or disco < 0:
             disponibilidade = False
-        if not disponibilidade:
-            print("Os recursos que o processo pede nao estao disponiveis!")
+        
         return disponibilidade
 
     def alocarRecurso(self, processo):

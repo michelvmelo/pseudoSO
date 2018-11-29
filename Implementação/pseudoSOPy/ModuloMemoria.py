@@ -50,6 +50,7 @@ class GerenciadorMemoria:
 
 
     def desalocaMemoria(self, processo):
+        #print processo
         PID = processo['PID']
         ini = processo['offset']
         fim = ini + processo['blocos_mem']

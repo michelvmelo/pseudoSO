@@ -35,6 +35,7 @@ def lerArqSistemaArquivos(arquivo):
     gerenArquivos.numerarOperacoes()
     #print(gerenArquivos.listaArquivos)
     #print(gerenArquivos.listaOperacoes)
+    #print gerenArquivos.numeroSegmentos
 
 def operacao(n, sema):
     sema.acquire()
@@ -53,12 +54,12 @@ def main():
         gerenArquivos.inicializarDisco()
 
         tempo = 0
-        #for n in range(14):
+        #for n in range(20):
         while (len(gerenProcessos.filaProcessosProntos) > 0):
             print 'TEMPO: {}'.format(tempo)
 
             if gerenProcessos.executando:
-                aux = gerenArquivos.executaOperacao(gerenProcessos.executando)
+                aux = gerenArquivos.executaOperacao(gerenProcessos, gerenProcessos.executando)
                 if not aux:
                     gerenProcessos.matarprocesso(gerenRecursos, gerenMemoria, gerenProcessos.executando)
                     gerenProcessos.escalonarProcesso(gerenRecursos, gerenMemoria, gerenArquivos)
@@ -66,9 +67,10 @@ def main():
             else:
                 #print gerenProcessos.filaProcessosProntos
                 prs = [pr for pr in gerenProcessos.filaProcessosProntos if pr['tempo_inicial'] <= tempo]
-                gerenProcessos.filaProcessosProntos.remove(pr)
-                gerenProcessos.separarProcesso(pr)
-                gerenProcessos.escalonarProcesso(gerenRecursos, gerenMemoria, gerenArquivos)
+                if len(prs) > 0:
+                    gerenProcessos.filaProcessosProntos.remove(prs[0])
+                    gerenProcessos.separarProcesso(prs[0])
+                    gerenProcessos.escalonarProcesso(gerenRecursos, gerenMemoria, gerenArquivos)
 
             tempo += 1
         gerenArquivos.imprimirDisco()

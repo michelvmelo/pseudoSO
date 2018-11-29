@@ -4,17 +4,18 @@ from operator import itemgetter
 
 class Arquivo:
     def __init__(self, arquivo, ID = None):
-        self.nome = arquivo[0]
-        self.primeiroBloco = int(arquivo[1])
-        self.quantidadeBlocos = int(arquivo[2])
+        self.nome               = arquivo[0]
+        self.primeiroBloco      = int(arquivo[1])
+        self.quantidadeBlocos   = int(arquivo[2])
         self.ID = ID
 
 class Operacao:
     def __init__(self, info):
-        self.idOperacao = None
-        self.idProcesso = int(info[0])
-        self.codOperacao = int(info[1])
-        self.nomeArquivo = info[2]
+        self.idOperacao         = None
+        self.idProcesso         = int(info[0])
+        self.codOperacao        = int(info[1])
+        self.nomeArquivo        = info[2]
+        self.controlador        = 0
         if (self.codOperacao == 0):
             self.numeroBlocos = int(info[3])
         else:
@@ -49,7 +50,7 @@ class GerenciadorArquivos:
             # Preenche os blocos do disco com o nome dos arquivos de entrada correspondente
             self.disco[arquivos['primeiroBloco']:arquivos['primeiroBloco'] + arquivos['quantidadeBlocos']] = arquivos['quantidadeBlocos'] *[arquivos['nome']]
 
-    def executaOperacao(self, processo):
+    def executaOperacao(self, gerenProcesso, processo):
         #SELECIONA OPERACOES DO PROCESSO
         ops = [op for op
                 in self.listaOperacoes
@@ -90,6 +91,7 @@ class GerenciadorArquivos:
                     print 'Operação {} => Falha'.format(op['idOperacao'])
                     print('O processo {} não pode criar o arquivo {} (Ja existe em disco).\n'.format(processo['PID'], nomeArquivo))
                 else:
+
                     for k, g in groupby(enumerate(self.disco), itemgetter(1)):
                         bloco = map(itemgetter(1), g)
                         if len(bloco) >= numeroBlocos and bloco[0] == -1:
@@ -106,19 +108,17 @@ class GerenciadorArquivos:
                         offset = offset + len(bloco)
 
                     if not execOp:
-                        # ???????????? Manda processo para o fim da fila
-                        # Ou so retira a operacao da lista de operacoes
-                        self.listaOperacoes.remove(op)
-                        ###### FAZER FUNCAO P MANDAR PROCESSO FINAL DA FILA
+                        # Manda processo p o fim da fila
+                        if op['controlador'] < 1:
+                            self.listaOperacoes.append(op)
+                            op['controlador'] += 1
 
-
-
-
-
-
+                        else:
+                            self.listaOperacoes.remove(op)
 
                         print 'Operação {} => Falha'.format(op['idOperacao'])
                         print('O processo {} não pode criar o arquivo {} (falta de espaço).\n'.format(processo['PID'], nomeArquivo))        #Se é operacao de deletar Arquivo
+                        #return False
             ##### OPERACAO PARA DELETAR ARQUIVO ##############
             elif op1:
                 op  = op1.pop(0)
